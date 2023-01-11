@@ -18,11 +18,12 @@ sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 exports.create = async (req, res) => {
   try {
-    // console.log(req.fields);
-    // console.log(req.files);
+    console.log(req.fields);
+    console.log(req.files);
     const { name, description, price, category, quantity, shipping } =
       req.fields;
     const { photo } = req.files;
+    console.log("PHOTO========>",photo)
 
     // validation
     switch (true) {
@@ -161,9 +162,9 @@ exports.update = async (req, res) => {
 exports.filteredProducts = async (req, res) => {
   try {
     const { checked, radio } = req.body;
-
+    
     let args = {};
-    if (checked.length > 0) args.category = checked;
+    if (checked.length > 0) args.category = checked
     if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
     console.log("args => ", args);
 

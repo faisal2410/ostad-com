@@ -15,7 +15,7 @@ exports.register = async (req, res) => {
       return res.json({ error: "Name is required" });
     }
     if (!email) {
-      return res.json({ error: "Email is taken" });
+      return res.json({ error: "Email is required" });
     }
     if (!password || password.length < 6) {
       return res.json({ error: "Password must be at least 6 characters long" });
@@ -100,6 +100,7 @@ exports.updateProfile = async (req, res) => {
   try {
     const { name, password, address } = req.body;
     const user = await User.findById(req.user._id);
+   
     // check password length
     if (password && password.length < 6) {
       return res.json({
