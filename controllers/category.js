@@ -24,6 +24,7 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const { name } = req.body;
+    console.log(req.params)
     const { categoryId } = req.params;
     const category = await Category.findByIdAndUpdate(
       categoryId,

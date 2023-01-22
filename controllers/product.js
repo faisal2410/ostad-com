@@ -27,17 +27,17 @@ exports.create = async (req, res) => {
 
     // validation
     switch (true) {
-      case !name.trim():
+      case !name?.trim():
         return res.json({ error: "Name is required" });
-      case !description.trim():
+      case !description?.trim():
         return res.json({ error: "Description is required" });
-      case !price.trim():
+      case !price?.trim():
         return res.json({ error: "Price is required" });
-      case !category.trim():
+      case !category?.trim():
         return res.json({ error: "Category is required" });
-      case !quantity.trim():
+      case !quantity?.trim():
         return res.json({ error: "Quantity is required" });
-      case !shipping.trim():
+      case !shipping?.trim():
         return res.json({ error: "Shipping is required" });
       case photo && photo.size > 1000000:
         return res.json({ error: "Image should be less than 1mb in size" });
@@ -117,24 +117,28 @@ exports.update = async (req, res) => {
     const { name, description, price, category, quantity, shipping } =
       req.fields;
     const { photo } = req.files;
+    // console.log(req.params.productId)
 
+    // option1
     // validation
     switch (true) {
-      case !name.trim():
-        res.json({ error: "Name is required" });
-      case !description.trim():
-        res.json({ error: "Description is required" });
-      case !price.trim():
-        res.json({ error: "Price is required" });
-      case !category.trim():
-        res.json({ error: "Category is required" });
-      case !quantity.trim():
-        res.json({ error: "Quantity is required" });
-      case !shipping.trim():
-        res.json({ error: "Shipping is required" });
+      case !name?.trim():
+      return  res.json({ error: "Name is required" });
+      case !description?.trim():
+      return  res.json({ error: "Description is required" });
+      case !price?.trim():
+      return  res.json({ error: "Price is required" });
+      case !category?.trim():
+      return  res.json({ error: "Category is required" });
+      case !quantity?.trim():
+      return  res.json({ error: "Quantity is required" });
+      case !shipping?.trim():
+      return  res.json({ error: "Shipping is required" });
       case photo && photo.size > 1000000:
-        res.json({ error: "Image should be less than 1mb in size" });
+      return  res.json({ error: "Image should be less than 1mb in size" });
     }
+
+   
 
     // update product
     const product = await Product.findByIdAndUpdate(

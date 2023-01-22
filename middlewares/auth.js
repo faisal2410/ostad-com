@@ -7,6 +7,7 @@ exports.requireSignin = (req, res, next) => {
       req.headers.authorization,
       process.env.JWT_SECRET
     );
+  
     req.user = decoded;
     next();
   } catch (err) {

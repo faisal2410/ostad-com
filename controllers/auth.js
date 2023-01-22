@@ -27,7 +27,7 @@ exports.register = async (req, res) => {
     }
     // 4. hash password
     const hashedPassword = await hashPassword(password);
-    // 5. register user
+    // 5. register user    
     const user = await new User({
       name,
       email,
@@ -58,7 +58,7 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
     // 2. all fields require validation
     if (!email) {
-      return res.json({ error: "Email is taken" });
+      return res.json({ error: "Email is required" });
     }
     if (!password || password.length < 6) {
       return res.json({ error: "Password must be at least 6 characters long" });
@@ -71,7 +71,7 @@ exports.login = async (req, res) => {
     // 4. compare password
     const match = await comparePassword(password, user.password);
     if (!match) {
-      return res.json({ error: "Wrong password" });
+      return res.json({ error: "Invalid email or password" });
     }
     // 5. create signed jwt
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
@@ -100,6 +100,7 @@ exports.updateProfile = async (req, res) => {
   try {
     const { name, password, address } = req.body;
     const user = await User.findById(req.user._id);
+    
    
     // check password length
     if (password && password.length < 6) {
@@ -117,7 +118,7 @@ exports.updateProfile = async (req, res) => {
         password: hashedPassword || user.password,
         address: address || user.address,
       },
-      { new: true }
+      { new: true } 
     );
 
     updated.password = undefined;
