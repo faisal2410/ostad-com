@@ -9,12 +9,12 @@ const sgMail =require("@sendgrid/mail");
 
 sgMail.setApiKey(process.env.SENDGRID_KEY);
 
-// const gateway = new braintree.BraintreeGateway({
-//   environment: braintree.Environment.Sandbox,
-//   merchantId: process.env.BRAINTREE_MERCHANT_ID,
-//   publicKey: process.env.BRAINTREE_PUBLIC_KEY,
-//   privateKey: process.env.BRAINTREE_PRIVATE_KEY,
-// });
+const gateway = new braintree.BraintreeGateway({
+  environment: braintree.Environment.Sandbox,
+  merchantId: process.env.BRAINTREE_MERCHANT_ID,
+  publicKey: process.env.BRAINTREE_PUBLIC_KEY,
+  privateKey: process.env.BRAINTREE_PRIVATE_KEY,
+});
 
 exports.create = async (req, res) => {
   try {
@@ -92,6 +92,7 @@ exports.photo = async (req, res) => {
     );
     if (product.photo.data) {
       res.set("Content-Type", product.photo.contentType);
+      res.set("Cross-Origin-Resource-Policy", "cross-origin")
       return res.send(product.photo.data);
     }
   } catch (err) {
@@ -191,7 +192,7 @@ exports.productsCount = async (req, res) => {
 
 exports.listProducts = async (req, res) => {
   try {
-    const perPage = 6;
+    const perPage = 2;
     const page = req.params.page ? req.params.page : 1;
 
     const products = await Product.find({})
@@ -212,7 +213,7 @@ exports.productsSearch = async (req, res) => {
     const results = await Product.find({
       $or: [
         { name: { $regex: keyword, $options: "i" } },
-        { description: { $regex: keyword, $options: "i" } },
+        { description: { $regex: keyword, $options: "i" } }        
       ],
     }).select("-photo");
 
@@ -225,6 +226,7 @@ exports.productsSearch = async (req, res) => {
 exports.relatedProducts = async (req, res) => {
   try {
     const { productId, categoryId } = req.params;
+    
     const related = await Product.find({
       category: categoryId,
       _id: { $ne: productId },
